@@ -12,7 +12,6 @@ import {Link} from 'react-router-dom'
 import {list} from './api-user.js'
 
 
-
 const styles = theme => ({
     root: theme.mixins.gutters({
         padding: theme.spacing.unit,
@@ -41,13 +40,12 @@ class Users extends Component {
     }
 
 
-
     render() {
         const {classes} = this.props
         return (
-            <paper className={classes.root} elevation={4}>
+            <Paper className={classes.root} elevation={4}>
                 <Typography type="title" className={classes.title}>
-                    All users
+                    All Users
                 </Typography>
                 <List dense>
                     {this.state.users.map((item, i) => {
@@ -69,7 +67,7 @@ class Users extends Component {
                     })
                     }
                 </List>
-            </paper>
+            </Paper>
         )
     }
 }

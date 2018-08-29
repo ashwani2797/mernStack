@@ -29,14 +29,14 @@ const read = (params, credentials) => {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + credentials.t
         }
-    }).then(response => {
+    }).then((response) => {
         return response.json()
     }).catch(err => console.log(err))
 }
 
 
 const update = (params, credentials, user) => {
-    return fetch('/api/users' + params.id, {
+    return fetch('/api/users' + params.userId, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',

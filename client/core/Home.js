@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {withStyles} from 'material-ui/styles'
 import Card, {CardContent, CardMedia} from 'material-ui/Card'
 import Typography from 'material-ui/Typography'
-import seashellImg from './../assets/images/kiki.jpg'
+import kiki from './../assets/images/kiki.jpg'
 
 
 const styles = theme => ({
@@ -30,7 +30,7 @@ class Home extends Component {
                     <Typography type="headline" component="h2" className={classes.title}>
                         Kiki love!
                     </Typography>
-                    <CardMedia className={classes.media} image={seashellImg} title={"Here is the kiki"}/>
+                    <CardMedia className={classes.media} image={kiki} title={"Here is the kiki"}/>
                     <CardContent>
                         <Typography type="body1" component="p">
                             Welcome ! Find your kiki here!
