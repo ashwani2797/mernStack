@@ -56,7 +56,7 @@ app.get('*', (req, res) => {
     })
     const generateClassName = createGenerateClassName()
     const context = {}
-    const markup = ReactDOMServer.renderToNodeStream(
+    const markup = ReactDOMServer.renderToString(
         <StaticRouter location={req.url} context={context}>
             <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
                 <MuiThemeProvider theme={theme} sheetsManager={new Map()}>
@@ -65,6 +65,7 @@ app.get('*', (req, res) => {
             </JssProvider>
         </StaticRouter>
     )
+    console.log(markup);
     if (context.url) {
         return res.redirect(303, context.url)
     }
