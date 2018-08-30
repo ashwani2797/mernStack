@@ -11,7 +11,7 @@ import mongoose from 'mongoose'
 devBundle.compile(app); // Only for development purposes
 
 const CURRENT_WORKING_DIR = process.cwd();
-app.use('/dist', express.static(path.join(CURRENT_WORKING_DIR, 'dist')));
+app.use('/dist', express.static(path.join(CURRENT_WORKING_DIR, '/dist')));
 
 
 app.get('/', (req, res) => {
