@@ -7,6 +7,7 @@ import helmet from 'helmet'
 import Template from './../template'
 import userRoutes from './routes/user.routes'
 import authRoutes from './routes/auth.routes'
+import path from 'path'
 
 // modules for server side rendering
 import React from 'react'
@@ -20,7 +21,15 @@ import {MuiThemeProvider, createMuiTheme, createGenerateClassName} from 'materia
 import {indigo, pink} from 'material-ui/colors'
 //end
 
+//comment out before building for production
+import devBundle from './devBundle'
+
+
+const CURRENT_WORKING_DIR = process.cwd();
 const app = express();
+//comment out before building for production
+devBundle.compile(app)
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -28,6 +37,9 @@ app.use(cookieParser());
 app.use(compress());
 app.use(helmet());
 app.use(cors());
+
+
+app.use('/dist', express.static(path.join(CURRENT_WORKING_DIR, 'dist')));
 
 app.use('/', userRoutes);
 app.use('/', authRoutes);

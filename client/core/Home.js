@@ -13,7 +13,7 @@ const styles = theme => ({
         marginTop: theme.spacing.unit * 5
     },
     title: {
-        padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 2.5}px ${theme.spacing.unit * 2}px`,
+        padding:`${theme.spacing.unit * 3}px ${theme.spacing.unit * 2.5}px ${theme.spacing.unit * 2}px`,
         color: theme.palette.text.secondary
     },
     media: {
