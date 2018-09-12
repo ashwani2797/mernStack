@@ -77,7 +77,6 @@ app.get('*', (req, res) => {
             </JssProvider>
         </StaticRouter>
     )
-    console.log(markup);
     if (context.url) {
         return res.redirect(303, context.url)
     }

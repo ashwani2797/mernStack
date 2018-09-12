@@ -1,11 +1,11 @@
 const create = (user) => {
     return fetch('/api/users', {
         method: 'POST',
-        heaaders: {
+        headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: Json.stringify(user)
+        body: JSON.stringify(user)
     })
         .then((response) => {
             return response.json()
@@ -22,7 +22,7 @@ const list = () => {
 }
 
 const read = (params, credentials) => {
-    return fetch('/api/users' + params.userId, {
+    return fetch('/api/users/' + params.userId, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -36,7 +36,7 @@ const read = (params, credentials) => {
 
 
 const update = (params, credentials, user) => {
-    return fetch('/api/users' + params.userId, {
+    return fetch('/api/users/' + params.userId, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
