@@ -36,14 +36,14 @@ const read = (params, credentials) => {
 
 
 const update = (params, credentials, user) => {
+    console.log(user);
     return fetch('/api/users/' + params.userId, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + credentials.t
         },
-        body: JSON.stringify(user)
+        body: user
     }).then((response) => {
         return response.json()
     }).catch((err) => console.log(err))
@@ -62,5 +62,39 @@ const remove = (params, credentials) => {
     }).catch((err) => console.log(err))
 }
 
-export {create, list, read, update, remove}
+const follow = (params, credentials, followId) => {
+    return fetch('/api/users/follow/', {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + credentials.t
+        },
+        body: JSON.stringify({userId:params.userId, followId: followId})
+    }).then((response) => {
+        return response.json()
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+const unfollow = (params, credentials, unfollowId) => {
+    return fetch('/api/users/unfollow/', {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + credentials.t
+        },
+        body: JSON.stringify({userId:params.userId, unfollowId: unfollowId})
+    }).then((response) => {
+        return response.json()
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+
+
+export {create, list, read, update, remove, follow, unfollow}
 

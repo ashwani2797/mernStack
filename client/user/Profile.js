@@ -8,12 +8,12 @@ import IconButton from 'material-ui/IconButton'
 import Button from 'material-ui/Button'
 import Typography from 'material-ui/Typography'
 import Edit from 'material-ui-icons/Edit'
-import Person from 'material-ui-icons/Person'
 import Divider from 'material-ui/Divider'
 import DeleteUser from './DeleteUser'
 import auth from './../auth/auth-helper'
 import {read} from './api-user.js'
 import {Redirect, Link} from 'react-router-dom'
+import FollowProfileButton from './../user/FollowProfileButton'
 
 const styles = theme => ({
     root: theme.mixins.gutters({
@@ -32,11 +32,14 @@ class Profile extends Component {
     constructor({match}) {
         super()
         this.state = {
-            user: '',
-            redirectToSignin: false
+            user: {following: [], followers: []},
+            redirectToSignin: false,
+            following: false,
+            posts: []
         }
         this.match = match
     }
+
     init = (userId) => {
         const jwt = auth.isAuthenticated()
         read({
@@ -45,18 +48,47 @@ class Profile extends Component {
             if (data.error) {
                 this.setState({redirectToSignin: true})
             } else {
-                this.setState({user: data})
+                let following = this.checkFollow(data)
+                this.setState({user: data, following: following})
             }
         })
     }
+
+    checkFollow = (user) => {
+        const jwt = auth.isAuthenticated()
+        const match = user.followers.find((follower) => {
+            return follower._id == jwt.user._id
+        });
+        return match
+    }
+
+    clickFollowButton = (callApi) => {
+        const jwt = auth.isAuthenticated()
+        callApi({
+            userId: jwt.user._id
+        }, {
+            t: jwt.token
+        }, this.state.user._id).then((data) => {
+            if (data.error) {
+                this.setState({error: data.error})
+            } else {
+                this.setState({user: data, following: !this.state.following})
+            }
+        })
+    };
+
     componentWillReceiveProps = (props) => {
         this.init(props.match.params.userId)
-    }
+    };
     componentDidMount = () => {
         this.init(this.match.params.userId)
-    }
+    };
+
     render() {
-        const {classes} = this.props
+        const photoUrl = this.state.user._id
+            ? `/api/users/photo/${this.state.user._id}?${new Date().getTime()}`
+            : '/api/users/defaultphoto';
+        const {classes} = this.props;
         const redirectToSignin = this.state.redirectToSignin
         if (redirectToSignin) {
             return <Redirect to='/signin'/>
@@ -70,24 +102,26 @@ class Profile extends Component {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
-                                <Person/>
+                                <Avatar src={photoUrl} className={classes.bigAvatar}/>
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText primary={this.state.user.name} secondary={this.state.user.email}/> {
-                        auth.isAuthenticated().user && auth.isAuthenticated().user._id == this.state.user._id &&
-                        (<ListItemSecondaryAction>
-                            <Link to={"/user/edit/" + this.state.user._id}>
-                                <IconButton aria-label="Edit" color="primary">
-                                    <Edit/>
-                                </IconButton>
-                            </Link>
-                            <DeleteUser userId={this.state.user._id}/>
-                        </ListItemSecondaryAction>)
+                        auth.isAuthenticated().user && auth.isAuthenticated().user._id == this.state.user._id
+                            ? (<ListItemSecondaryAction>
+                                <Link to={"/user/edit/" + this.state.user._id}>
+                                    <IconButton aria-label="Edit" color="primary">
+                                        <Edit/>
+                                    </IconButton>
+                                </Link>
+                                <DeleteUser userId={this.state.user._id}/>
+                            </ListItemSecondaryAction>)
+                            : (<FollowProfileButton following={this.state.following}
+                                                    onButtonClick={this.clickFollowButton}/>)
                     }
                     </ListItem>
                     <Divider/>
                     <ListItem>
-                        <ListItemText primary={"Joined: " + (
+                        <ListItemText primary={this.state.user.about} secondary={"Joined: " + (
                             new Date(this.state.user.created)).toDateString()}/>
                     </ListItem>
                 </List>
@@ -95,6 +129,7 @@ class Profile extends Component {
         )
     }
 }
+
 Profile.propTypes = {
     classes: PropTypes.object.isRequired
 }
