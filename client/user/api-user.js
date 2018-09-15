@@ -70,7 +70,7 @@ const follow = (params, credentials, followId) => {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + credentials.t
         },
-        body: JSON.stringify({userId:params.userId, followId: followId})
+        body: JSON.stringify({userId: params.userId, followId: followId})
     }).then((response) => {
         return response.json()
     }).catch((err) => {
@@ -86,7 +86,7 @@ const unfollow = (params, credentials, unfollowId) => {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + credentials.t
         },
-        body: JSON.stringify({userId:params.userId, unfollowId: unfollowId})
+        body: JSON.stringify({userId: params.userId, unfollowId: unfollowId})
     }).then((response) => {
         return response.json()
     }).catch((err) => {
@@ -94,7 +94,19 @@ const unfollow = (params, credentials, unfollowId) => {
     })
 }
 
+const findPeople = (params, credentials) => {
+    return fetch('/api/users/findpeople/' + params.userId, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + credentials.t
+        }
+    }).then((response) => {
+        return response.json()
+    }).catch((err) => console.log(err))
+}
 
 
-export {create, list, read, update, remove, follow, unfollow}
+export {create, list, read, update, remove, follow, unfollow, findPeople}
 
