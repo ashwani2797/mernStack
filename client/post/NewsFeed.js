@@ -49,13 +49,13 @@ class Newsfeed extends Component {
         const updatedPosts = this.state.posts
         updatedPosts.unshift(post)
         this.setState({posts: updatedPosts})
-    }
+    };
     removePost = (post) => {
         const updatedPosts = this.state.posts
         const index = updatedPosts.indexOf(post)
         updatedPosts.splice(index, 1)
         this.setState({posts: updatedPosts})
-    }
+    };
     render() {
         const {classes} = this.props
         return (
@@ -73,6 +73,6 @@ class Newsfeed extends Component {
 }
 Newsfeed.propTypes = {
     classes: PropTypes.object.isRequired
-}
+};
 
 export default withStyles(styles)(Newsfeed)
