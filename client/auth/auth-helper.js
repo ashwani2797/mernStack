@@ -11,6 +11,7 @@ const auth = {
             return false
     },
     authenticate(jwt, cb) {
+        console.log("signin authenticate jwt:", jwt);
         if (typeof window !== "undefined")
             sessionStorage.setItem('jwt', JSON.stringify(jwt))
         cb()
