@@ -13,6 +13,7 @@ passport.serializeUser(function (user, cb) {
 
     var userFrontendObj = getUserFrontendObj(user);
     userFrontendString = JSON.stringify(userFrontendObj);
+    console.log(userFrontendString);
     cb(null, user);
 });
 
@@ -35,6 +36,7 @@ function getUserFrontendObj(userData) {
 }
 
 passport.deserializeUser(function (id, cb) {
+    console.log("Obj id at deserialize:" + id);
     User.findById(id, function (err, user) {
         cb(null, user);
     });
@@ -68,8 +70,9 @@ router.route('/auth/facebook')
     .get(passport.authenticate('facebook', { scope: 'email' }));
 
 router.route('/auth/facebook/callback')
-    .get(passport.authenticate('facebook', { failureRedirect: '/login' }),
+    .get(passport.authenticate('facebook', { failureRedirect: '/signin' }),
         function (req, res) {
+            console.log("Reached at success level" + userFrontendString);
             res.redirect('/facebook/' + userFrontendString);
         });
 
