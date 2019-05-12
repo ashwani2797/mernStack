@@ -4,23 +4,38 @@ import jwt from 'jsonwebtoken';
 import config from './../config/config'
 var passport = require('passport');
 const router = express.Router();
-var token = "";
+var userFrontendString = "";
 
 var FacebookStrategy = require('passport-facebook').Strategy;
 
 passport.serializeUser(function (user, cb) {
     console.log("User in serialize:" + user._id);
 
-     token = jwt.sign({
-        _id: user._id
-    }, config.jwtSecret);
-    console.log("Token generated" + token);
+    var userFrontendObj = getUserFrontendObj(user);
+    userFrontendString = JSON.stringify(userFrontendObj);
     cb(null, user);
 });
 
+function getUserFrontendObj(userData) {
+    var token = jwt.sign({
+        _id: userData._id
+    }, config.jwtSecret);
+
+    var user = {
+        "email": userData.email,
+        "name": userData.name,
+        "_id": userData._id
+    }
+
+    var data = {
+        "token": token,
+        "user": user
+    }
+    return data;
+}
+
 passport.deserializeUser(function (id, cb) {
-    console.log("Obj id at deserialize:" + id);
-    User.findById(id,function(err,user){
+    User.findById(id, function (err, user) {
         cb(null, user);
     });
 });
@@ -36,7 +51,7 @@ passport.use(new FacebookStrategy({
     function (accessToken, refreshToken, profile, cb) {
         console.log(profile._json.email);
 
-        User.findOne({ email: profile._json.email }).select('password email').exec(function(err, user) {
+        User.findOne({ email: profile._json.email }).select('password email name').exec(function (err, user) {
             if (err) done(err);
             if (user && user !== null) {
                 console.log("user found in middleware:" + user);
@@ -55,8 +70,7 @@ router.route('/auth/facebook')
 router.route('/auth/facebook/callback')
     .get(passport.authenticate('facebook', { failureRedirect: '/login' }),
         function (req, res) {
-            console.log("Reached at success level" + token);
-            res.redirect('/facebook/' + token);
+            res.redirect('/facebook/' + userFrontendString);
         });
 
 export default router;

@@ -96,7 +96,7 @@ class Signin extends Component {
                 </CardContent>
                 <CardActions>
                     <Button color="primary" variant="raised" onClick={this.clickSubmit} className={classes.submit}>Submit</Button>
-                   <a href="/auth/facebook" target="_blank"><Button color="primary" variant="raised">Facebook</Button></a>
+                   <a href="/auth/facebook"><Button color="primary" variant="raised">Facebook</Button></a>
                 </CardActions>
             </Card>
         )
