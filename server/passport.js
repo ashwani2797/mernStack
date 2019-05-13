@@ -4,9 +4,9 @@ import jwt from 'jsonwebtoken';
 import config from './../config/config'
 var passport = require('passport');
 const router = express.Router();
-var userFrontendString = "";
-
 var FacebookStrategy = require('passport-facebook').Strategy;
+
+var userFrontendString = "";
 
 passport.serializeUser(function (user, cb) {
     console.log("User in serialize:" + user._id);
@@ -73,7 +73,7 @@ router.route('/auth/facebook/callback')
     .get(passport.authenticate('facebook', { failureRedirect: '/signin' }),
         function (req, res) {
             console.log("Reached at success level" + userFrontendString);
-            res.redirect('/facebook/' + userFrontendString);
+            return res.redirect("/login/facebook/"+userFrontendString);
         });
 
 export default router;

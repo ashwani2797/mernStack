@@ -9,25 +9,28 @@ class FacebookLogin extends Component {
     constructor({ match }) {
         super();
         this.state = {
-            "redirectToHome": "false"
+            "redirectToHome": false
         }
         this.match = match;
     }
 
     componentDidMount() {
         let decodedURL = decodeURIComponent(this.match.params.content);
-        let jwt = JSON.parse(decodedURL);
-        auth.authenticate(jwt, () => {
-            this.setState({ redirectToHome: true });
+        try{
+            let jwt = JSON.parse(decodedURL);
+            auth.authenticate(jwt, () => {
+                this.setState({ redirectToHome: true });
         });
+        } catch(e){
+            this.setState({ redirectToHome: false });
+        }     
     }
 
     render() {
-        console.log(this.match.params);
         if (this.state.redirectToHome) {
-            return (<Redirect to="/" />)
+           return (<Redirect to="/" />);
         } else {
-            return (<div><h3>Loading.......</h3> </div>);
+            return (<div><h3>Error while logging by facebook</h3> </div>);
         }
     }
 }

@@ -29,8 +29,8 @@ class MainRouter extends Component {
                     <Route path="/users" component={Users}/>
                     <Route path="/signup" component={Signup}/>
                     <Route path="/signin" component={Signin}/>
-                    <Route path="/facebook/:content" component={FacebookLogin}/>
                     <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>
+                    <Route path="/login/facebook/:content" component={FacebookLogin}/>
                     <Route path="/user/:userId" component={Profile}/>
 
                 </Switch>
