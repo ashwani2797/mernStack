@@ -9,8 +9,6 @@ import Grid from 'material-ui/Grid'
 import auth from './../auth/auth-helper'
 import FindPeople from './../user/FindPeople'
 import Newsfeed from './../post/Newsfeed';
-import './style.scss';
-
 
 const styles = theme => ({
     card: {
@@ -57,7 +55,7 @@ class Home extends Component {
                             </Typography>
                             <CardMedia className={classes.media} image={community} title="Unicorn Shells"/>
                             <CardContent>
-                                <Typography type="h6" component="p" className="rang">
+                                <Typography type="h6" component="p">
                                     ALONE, we can do little. TOGETHER, we can do so much.
                                 </Typography>
                             </CardContent>
