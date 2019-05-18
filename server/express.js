@@ -19,15 +19,16 @@ import ReactDOMServer from 'react-dom/server'
 import MainRouter from './../client/MainRouter'
 import StaticRouter from 'react-router-dom/StaticRouter'
 
-import {SheetsRegistry} from 'react-jss/lib/jss'
+import { SheetsRegistry } from 'react-jss/lib/jss'
 import JssProvider from 'react-jss/lib/JssProvider'
-import {MuiThemeProvider, createMuiTheme, createGenerateClassName} from 'material-ui/styles'
-import {indigo, pink} from 'material-ui/colors'
+import { MuiThemeProvider, createMuiTheme, createGenerateClassName } from 'material-ui/styles'
+import { indigo, pink } from 'material-ui/colors'
 import morgan from 'morgan';
 //end
 
 //comment out before building for production
 import devBundle from './devBundle'
+import ContextProvider from './../client/ContextProvider.js';
 
 
 const CURRENT_WORKING_DIR = process.cwd();
@@ -36,7 +37,7 @@ const app = express();
 devBundle.compile(app);
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compress());
 app.use(helmet());
@@ -66,7 +67,12 @@ app.use('/', passportRoutes);
 
 
 app.get('*', (req, res) => {
-    const sheetsRegistry = new SheetsRegistry()
+    const sheetsRegistry = new SheetsRegistry();
+    const css = new Set();
+    const context = {
+        insertCss: (...styles) =>
+            styles.forEach(style => css.add(style._getCss()))
+    }
     const theme = createMuiTheme({
         palette: {
             primary: {
@@ -87,23 +93,25 @@ app.get('*', (req, res) => {
         },
     })
     const generateClassName = createGenerateClassName()
-    const context = {}
+    const contextLoc = {}
     const markup = ReactDOMServer.renderToString(
-        <StaticRouter location={req.url} context={context}>
+        <StaticRouter location={req.url} context={contextLoc}>
             <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
                 <MuiThemeProvider theme={theme} sheetsManager={new Map()}>
-                    <MainRouter/>
+                    <ContextProvider context={context}>
+                        <MainRouter />
+                    </ContextProvider>
                 </MuiThemeProvider>
             </JssProvider>
         </StaticRouter>
     )
-    if (context.url) {
-        return res.redirect(303, context.url)
+    if (contextLoc.url) {
+        return res.redirect(303, contextLoc.url)
     }
-    const css = sheetsRegistry.toString()
+    const css2 = sheetsRegistry.toString()
     res.status(200).send(Template({
         markup: markup,
-        css: css
+        css: css2
     }))
 })
 
@@ -111,7 +119,7 @@ app.get('*', (req, res) => {
 // Catch unauthorised errors
 app.use((err, req, res, next) => {
     if (err.name === 'UnauthorizedError') {
-        res.status(401).json({"error": err.name + ": " + err.message})
+        res.status(401).json({ "error": err.name + ": " + err.message })
     }
 })
 
