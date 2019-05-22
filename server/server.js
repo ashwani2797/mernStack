@@ -26,12 +26,12 @@ var messages = [
         "message": "there"
     },
     {
-        "author": "maun",
+        "author": "dev",
         "message": "yes"
     },
     {
         "author": "ashwani",
-        "message": "I <3 uh"
+        "message": "always"
     }
 ];
 
