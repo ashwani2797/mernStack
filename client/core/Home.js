@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {withStyles} from 'material-ui/styles'
 import Card, {CardContent, CardMedia} from 'material-ui/Card'
 import Typography from 'material-ui/Typography'
-import kiki from './../assets/images/kiki.jpg'
+import dev from './../assets/images/dev.png'
 import {Link} from 'react-router-dom'
 import Grid from 'material-ui/Grid'
 import auth from './../auth/auth-helper'
@@ -54,10 +54,10 @@ class Home extends Component {
                             <Typography type="headline" component="h2" className={classes.title}>
                                 Home Page
                             </Typography>
-                            <CardMedia className={classes.media} image={kiki} title="Unicorn Shells"/>
+                            <CardMedia className={classes.media} image={dev} title="Unicorn Shells"/>
                             <CardContent>
                                 <Typography type="body1" component="p">
-                                    Welcome ! Find your kiki here!
+                                    ALONE we can do so little, TOGETHER we can do so much
                                 </Typography>
                             </CardContent>
                         </Card>
