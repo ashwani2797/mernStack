@@ -9,6 +9,8 @@ import EditProfile from './user/EditProfile'
 import Profile from './user/Profile'
 import PrivateRoute from './auth/PrivateRoute'
 import Menu from './core/Menu'
+import Test from './core/Test';
+import ChatApp from './core/chatApp';
 
 class MainRouter extends Component {
 
@@ -32,7 +34,7 @@ class MainRouter extends Component {
                     <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>
                     <Route path="/login/facebook/:content" component={FacebookLogin}/>
                     <Route path="/user/:userId" component={Profile}/>
-
+                    <PrivateRoute path="/api/chat" component={ChatApp}/>
                 </Switch>
             </div>
         )
