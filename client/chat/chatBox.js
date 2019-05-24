@@ -65,58 +65,7 @@ class ChatBox extends Component {
         newMessage: '',
         endpoint: "http://127.0.0.1:5000",
         socket: null,
-        messageList: [{
-            _id: "5b9df161d867342a56ee1fec",
-            message: "hello"
-        }, {
-            _id: "5b996be78cf3b00b02c7c25f",
-            message: "Hi"
-        }, {
-            _id: "5b9df161d867342a56ee1fec",
-            message: "How are you!"
-        }, {
-            _id: "5b996be78cf3b00b02c7c25f",
-            message: "Good"
-        },
-        {
-            _id: "5b9df161d867342a56ee1fec",
-            message: "very looooooooonnnnngggggggg messsssssaaaaaageeeeeeeeeee"
-        }, {
-            _id: "5b996be78cf3b00b02c7c25f",
-            message: "hahaha nice"
-        }, {
-            _id: "5b9df161d867342a56ee1fec",
-            message: "I can"
-        }, {
-            _id: "5b996be78cf3b00b02c7c25f",
-            message: "I will"
-        },
-        {
-            _id: "5b9df161d867342a56ee1fec",
-            message: "hello"
-        }, {
-            _id: "5b996be78cf3b00b02c7c25f",
-            message: "Hi"
-        }, {
-            _id: "5b9df161d867342a56ee1fec",
-            message: "How are you!"
-        }, {
-            _id: "5b996be78cf3b00b02c7c25f",
-            message: "Good"
-        },
-        {
-            _id: "5b9df161d867342a56ee1fec",
-            message: "very looooooooonnnnngggggggg messsssssaaaaaageeeeeeeeeee"
-        }, {
-            _id: "5b996be78cf3b00b02c7c25f",
-            message: "hahaha nice"
-        }, {
-            _id: "5b9df161d867342a56ee1fec",
-            message: "I can"
-        }, {
-            _id: "5b996be78cf3b00b02c7c25f",
-            message: "I will"
-        }]
+        messageList: []
     }
 
     componentWillMount() {
@@ -125,11 +74,24 @@ class ChatBox extends Component {
         socket.on('connect', () => {
             console.log("Front end connected");
 
-            socket.on('messages', function (data) {
-                console.log("Messages" + data[0].author);
+            socket.on('messageList', function (data) {
+                console.log("Messages from backend" + data);
+                this.setState({ messageList: data});
             }.bind(this));
         })
         this.setState({ socket });
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(this.props.activeUser._id != nextProps.activeUser._id){
+            console.log("call socket");
+            const { socket } = this.state;
+            var data = {
+                sender: this.props.user._id,
+                reciever: nextProps.activeUser._id
+            }
+            socket.emit('fetchMessages',data);
+        }
     }
 
     handleChange = (event) => {

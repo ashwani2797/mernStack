@@ -20,38 +20,36 @@ app.listen(config.port, (err) => {
 });
 
 
-var messages = [
-    {
-        "author": "ashwani",
-        "message": "there"
-    },
-    {
-        "author": "dev",
-        "message": "yes"
-    },
-    {
-        "author": "ashwani",
-        "message": "always"
-    }
-];
-
+var messageList = [{
+    _id: "5b9df161d867342a56ee1fec",
+    message: "hello"
+}, {
+    _id: "5b996be78cf3b00b02c7c25f",
+    message: "Hi"
+}, {
+    _id: "5b9df161d867342a56ee1fec",
+    message: "How are you!"
+}, {
+    _id: "5b996be78cf3b00b02c7c25f",
+    message: "Good"
+},
+{
+    _id: "5b9df161d867342a56ee1fec",
+    message: "very looooooooonnnnngggggggg messsssssaaaaaageeeeeeeeeee"
+}, {
+    _id: "5b996be78cf3b00b02c7c25f",
+    message: "back end data only"
+}];
 
 client.on('connection', function (socket) {
     console.log("Connected on backend");
     var id = socket.id;
     console.log(id);
 
-    var obj = {
-        success: true,
-        message: "done"
-    }
-    client.to(id).emit('messages',messages);
-
-    socket.on('input',function(data){
-        console.log(data.message);
-        
+    socket.on('fetchMessages',function(data){
+        console.log(data); 
+        client.to(id).emit('messageList', messageList);       
     });
-
 
     //create function to send status
     function sendStatus(id,s) {
