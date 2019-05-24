@@ -24,7 +24,9 @@ const styles = theme => ({
         borderBottom: '4px solid #274496',
         height: '600px',
         overflowY: 'scroll',
-        marginTop: '20px'
+        marginTop: '20px',
+        paddingLeft: '20px',
+        paddingRight: '20px'
     },
     marginLeft: {
         marginLeft: '10px'
@@ -64,6 +66,32 @@ class ChatBox extends Component {
         endpoint: "http://127.0.0.1:5000",
         socket: null,
         messageList: [{
+            _id: "5b9df161d867342a56ee1fec",
+            message: "hello"
+        }, {
+            _id: "5b996be78cf3b00b02c7c25f",
+            message: "Hi"
+        }, {
+            _id: "5b9df161d867342a56ee1fec",
+            message: "How are you!"
+        }, {
+            _id: "5b996be78cf3b00b02c7c25f",
+            message: "Good"
+        },
+        {
+            _id: "5b9df161d867342a56ee1fec",
+            message: "very looooooooonnnnngggggggg messsssssaaaaaageeeeeeeeeee"
+        }, {
+            _id: "5b996be78cf3b00b02c7c25f",
+            message: "hahaha nice"
+        }, {
+            _id: "5b9df161d867342a56ee1fec",
+            message: "I can"
+        }, {
+            _id: "5b996be78cf3b00b02c7c25f",
+            message: "I will"
+        },
+        {
             _id: "5b9df161d867342a56ee1fec",
             message: "hello"
         }, {
