@@ -35,7 +35,7 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center'
     },
-    messageBodySelf:{
+    messageBodySelf: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end'
@@ -73,24 +73,24 @@ class ChatBox extends Component {
         const socket = socketIOClient(endpoint);
         socket.on('connect', () => {
             console.log("Front end connected");
-
+            socket.emit('register', this.props.user);
             socket.on('messageList', function (data) {
                 console.log("Messages from backend" + data);
-                this.setState({ messageList: data});
+                this.setState({ messageList: data });
             }.bind(this));
         })
         this.setState({ socket });
     }
-
-    componentWillReceiveProps(nextProps){
-        if(this.props.activeUser._id != nextProps.activeUser._id){
+   
+    componentWillReceiveProps(nextProps) {
+        const { socket } = this.state;
+        if (this.props.activeUser._id != nextProps.activeUser._id) {
             console.log("call socket");
-            const { socket } = this.state;
             var data = {
                 sender: this.props.user._id,
                 reciever: nextProps.activeUser._id
             }
-            socket.emit('fetchMessages',data);
+            socket.emit('fetchMessages', data);
         }
     }
 
@@ -100,7 +100,7 @@ class ChatBox extends Component {
     }
 
     renderMessage = (id, message, index, classes) => {
-        if(this.props.activeUser._id == id ){
+        if (this.props.activeUser._id == id) {
             return (
                 <div className={classes.messageBody} key={index}>
                     <div className={classes.authorBody}> {this.props.activeUser.name}</div>

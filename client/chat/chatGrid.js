@@ -58,6 +58,7 @@ class ChatApp extends Component {
         following: [],
         user: null,
         friends: [],
+        loading: true,
         activeUser: { name: "no_user" }
     }
 
@@ -76,7 +77,7 @@ class ChatApp extends Component {
                 console.log(data);
                 let friends = data.followers.concat(data.following);
                 console.log(friends);
-                this.setState({ user: data, friends: friends });
+                this.setState({ user: data, friends: friends, loading: false});
             }
         })
     }
@@ -126,7 +127,8 @@ class ChatApp extends Component {
 
                 </div>
                 <div className={classes.chatContainer}>
-                    <ChatBox activeUser={this.state.activeUser} user={this.state.user} />
+                   { this.state.loading || <ChatBox activeUser={this.state.activeUser} user={this.state.user} />}
+                   { this.state.loading && <div> Loading....</div>}
                 </div>
                 <div className={classes.groupMembers}>Group members</div>
             </div>
