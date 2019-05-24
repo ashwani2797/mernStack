@@ -45,8 +45,6 @@ client.on('connection', function (socket) {
         success: true,
         message: "done"
     }
-//    socket.emit('output',obj);
-
     client.to(id).emit('messages',messages);
 
     socket.on('input',function(data){

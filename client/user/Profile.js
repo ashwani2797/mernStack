@@ -17,6 +17,7 @@ import FollowProfileButton from './../user/FollowProfileButton'
 import ProfileTabs from './../user/ProfileTabs'
 import {listByUser} from './../post/api-post.js'
 
+
 const styles = theme => ({
     root: theme.mixins.gutters({
         maxWidth: 600,

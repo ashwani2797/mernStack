@@ -9,8 +9,7 @@ import EditProfile from './user/EditProfile'
 import Profile from './user/Profile'
 import PrivateRoute from './auth/PrivateRoute'
 import Menu from './core/Menu'
-import Test from './core/Test';
-import ChatApp from './core/chatApp';
+import ChatApp from './chat/chatGrid';
 
 class MainRouter extends Component {
 

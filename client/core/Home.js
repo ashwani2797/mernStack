@@ -9,7 +9,7 @@ import Grid from 'material-ui/Grid'
 import auth from './../auth/auth-helper'
 import FindPeople from './../user/FindPeople'
 import Newsfeed from './../post/Newsfeed'
-import Test from './../core/Test';
+import Test from '../chat/Test';
 
 
 const styles = theme => ({
