@@ -1,69 +1,19 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types';
-import Divider from 'material-ui/Divider';
-import FormControl from 'material-ui/Form/FormControl';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
-import List, { ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from 'material-ui/List'
 import Avatar from 'material-ui/Avatar';
 import socketIOClient from "socket.io-client";
 import Snackbar from 'material-ui/Snackbar';
-
-const styles = theme => ({
-    title: {
-        fontSize: '20px',
-        height: '50px',
-        borderBottom: '4px solid lightgrey',
-        textAlign: 'center',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    messageArea: {
-        borderBottom: '4px solid #274496',
-        height: '600px',
-        overflowY: 'scroll',
-        marginTop: '20px',
-        paddingLeft: '20px',
-        paddingRight: '20px'
-    },
-    marginLeft: {
-        marginLeft: '10px'
-    },
-    messageBody: {
-        display: 'flex',
-        alignItems: 'center'
-    },
-    messageBodySelf: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end'
-    },
-    message: {
-        margin: '10px',
-        color: 'white',
-        backgroundColor: '#4153b6',
-        border: '4px solid #4153b6',
-        borderRadius: '5px',
-        padding: '2px',
-        width: 'fit-content',
-    },
-    authorBody: {
-        margin: '1px',
-        marginLeft: '2px',
-        padding: '2px',
-        width: 'fit-content',
-    }
-});
-
+import styles from './style.js';
 
 class ChatBox extends Component {
 
     state = {
         user: this.props.user,
         newMessage: '',
-        endpoint: "http://192.168.0.104:5000",
+        endpoint: "http://127.0.0.1:5000",
         socket: null,
         messageList: [],
         notificationMessage: 'new message',
@@ -76,13 +26,9 @@ class ChatBox extends Component {
         const socket = socketIOClient(endpoint);
         socket.on('connect', () => {
             console.log("Front end connected");
-
             socket.emit('register', this.props.user);
 
             socket.on('messageList', function (messageResponse) {
-                console.log("Messages from backend");
-                console.log(messageResponse);
-
                 this.setState({ messageList: messageResponse.messageList, conversationId: messageResponse.conversationId });
             }.bind(this));
 
@@ -94,7 +40,6 @@ class ChatBox extends Component {
                 var messageList = this.state.messageList;
                 messageList.push(newMessage);
                 this.setState({ messageList });
-                console.log("new message recieved");
             }.bind(this));
         });
         this.setState({ socket });
@@ -103,7 +48,6 @@ class ChatBox extends Component {
     componentWillReceiveProps(nextProps) {
         const { socket } = this.state;
         if (this.props.activeUser._id != nextProps.activeUser._id) {
-            console.log("call socket");
             var data = {
                 sender: this.props.user._id,
                 reciever: nextProps.activeUser._id

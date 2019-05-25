@@ -8,9 +8,7 @@ import {Link} from 'react-router-dom'
 import Grid from 'material-ui/Grid'
 import auth from './../auth/auth-helper'
 import FindPeople from './../user/FindPeople'
-import Newsfeed from './../post/Newsfeed'
-import Test from '../chat/Test';
-
+import Newsfeed from './../post/Newsfeed';
 
 const styles = theme => ({
     card: {
@@ -72,7 +70,6 @@ class Home extends Component {
                     </Grid>
                     <Grid item xs={6} sm={5}>
                         <FindPeople/>
-                        <Test/>
                     </Grid>
                 </Grid>
                 }
