@@ -87,6 +87,10 @@ class ChatBox extends Component {
             }.bind(this));
 
             socket.on("newMessage", function (newMessage) {
+                if(newMessage.author !== this.props.activeUser._id){
+                    let notification ="New message from " + newMessage.authorName;
+                    this.setState({ showNotification: true,notificationMessage: notification});
+                }
                 var messageList = this.state.messageList;
                 messageList.push(newMessage);
                 this.setState({ messageList });
@@ -139,6 +143,7 @@ class ChatBox extends Component {
         var data = {
             message: newMessage,
             author: this.props.user._id,
+            authorName: this.props.user.name,
             reciever: this.props.activeUser._id,
             conversationId: this.state.conversationId
         }

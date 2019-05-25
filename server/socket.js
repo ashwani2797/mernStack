@@ -65,7 +65,6 @@ module.exports.listen = function (port) {
                     conversation = conversation[0];
                     console.log("In fetch messages " + conversation.users);
                     Message.find({ conversationId : conversation._id })
-                    
                     .exec((err,messages) => {
                         if (err) {
                             console.log("Error while quering messages" + err);
@@ -109,9 +108,6 @@ module.exports.listen = function (port) {
             }
             client.to(recieverId).emit('newMessage', newMessage);
         });
-
-
-
 
     });
 };
