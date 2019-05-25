@@ -91,7 +91,7 @@ module.exports.listen = function (port) {
 
             var messageModel = new Message({
                 message: newMessage.message,
-                author: newMessage._id,
+                author: newMessage.author,
                 conversationId: newMessage.conversationId
             });
 

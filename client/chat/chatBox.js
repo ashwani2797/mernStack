@@ -80,7 +80,6 @@ class ChatBox extends Component {
             socket.emit('register', this.props.user);
 
             socket.on('messageList', function (messageResponse) {
-
                 console.log("Messages from backend");
                 console.log(messageResponse);
 
@@ -139,16 +138,12 @@ class ChatBox extends Component {
         var { socket, newMessage, messageList } = this.state;
         var data = {
             message: newMessage,
-            _id: this.props.user._id,
+            author: this.props.user._id,
             reciever: this.props.activeUser._id,
             conversationId: this.state.conversationId
         }
         socket.emit("sendMessage", data);
-        var messageBody = {
-            message: newMessage,
-            _id: this.props.user._id,
-        }
-        messageList.push(messageBody);
+        messageList.push(data);
         this.setState({ newMessage: '', messageList: messageList });
     }
 
@@ -168,7 +163,7 @@ class ChatBox extends Component {
                     </div>
                 </div>
                 <div className={classes.messageArea}>
-                    {this.state.messageList.map((message, index) => this.renderMessage(message._id, message.message, index, classes))}
+                    {this.state.messageList.map((message, index) => this.renderMessage(message.author, message.message, index, classes))}
                 </div>
 
                 <div>
