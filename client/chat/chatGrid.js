@@ -11,6 +11,8 @@ import ViewIcon from 'material-ui-icons/Visibility';
 import Button from 'material-ui/Button';
 import Divider from 'material-ui/Divider';
 import ChatBox from './chatBox';
+import _ from 'lodash';
+
 
 
 const styles = theme => ({
@@ -75,7 +77,7 @@ class ChatApp extends Component {
                 this.setState({ redirectToSignin: true })
             } else {
                 console.log(data);
-                let friends = data.followers.concat(data.following);
+                let friends = _.uniqBy(data.followers.concat(data.following),'_id');
                 console.log(friends);
                 this.setState({ user: data, friends: friends, loading: false});
             }
