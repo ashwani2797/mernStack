@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const MessageSchema = new mongoose.Schema({
     message: {
         type: String,
-        required: 'Name is required'
+        required: 'Message is required'
     },
     author: {type: mongoose.Schema.ObjectId, ref: 'User'},
     created: {
@@ -12,5 +12,4 @@ const MessageSchema = new mongoose.Schema({
     },
     conversationId:{type: mongoose.Schema.ObjectId, ref: 'Conversation'}
 })
-
 export default mongoose.model('Message', MessageSchema);

@@ -8,7 +8,7 @@ import Button from 'material-ui/Button';
 import List, { ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from 'material-ui/List'
 import Avatar from 'material-ui/Avatar';
 import socketIOClient from "socket.io-client";
-
+import Snackbar from 'material-ui/Snackbar';
 
 const styles = theme => ({
     title: {
@@ -63,9 +63,12 @@ class ChatBox extends Component {
     state = {
         user: this.props.user,
         newMessage: '',
-        endpoint: "http://127.0.0.1:5000",
+        endpoint: "http://192.168.0.104:5000",
         socket: null,
-        messageList: []
+        messageList: [],
+        notificationMessage: 'new message',
+        showNotification: false,
+        conversationId: ''
     }
 
     componentWillMount() {
@@ -73,15 +76,27 @@ class ChatBox extends Component {
         const socket = socketIOClient(endpoint);
         socket.on('connect', () => {
             console.log("Front end connected");
+
             socket.emit('register', this.props.user);
-            socket.on('messageList', function (data) {
-                console.log("Messages from backend" + data);
-                this.setState({ messageList: data });
+
+            socket.on('messageList', function (messageResponse) {
+
+                console.log("Messages from backend");
+                console.log(messageResponse);
+
+                this.setState({ messageList: messageResponse.messageList, conversationId: messageResponse.conversationId });
             }.bind(this));
-        })
+
+            socket.on("newMessage", function (newMessage) {
+                var messageList = this.state.messageList;
+                messageList.push(newMessage);
+                this.setState({ messageList });
+                console.log("new message recieved");
+            }.bind(this));
+        });
         this.setState({ socket });
     }
-   
+
     componentWillReceiveProps(nextProps) {
         const { socket } = this.state;
         if (this.props.activeUser._id != nextProps.activeUser._id) {
@@ -116,6 +131,27 @@ class ChatBox extends Component {
         );
     };
 
+    handleClose = () => {
+        this.setState({ showNotification: false });
+    };
+
+    sendMessage = () => {
+        var { socket, newMessage, messageList } = this.state;
+        var data = {
+            message: newMessage,
+            _id: this.props.user._id,
+            reciever: this.props.activeUser._id,
+            conversationId: this.state.conversationId
+        }
+        socket.emit("sendMessage", data);
+        var messageBody = {
+            message: newMessage,
+            _id: this.props.user._id,
+        }
+        messageList.push(messageBody);
+        this.setState({ newMessage: '', messageList: messageList });
+    }
+
 
     render() {
         const { classes } = this.props;
@@ -134,6 +170,7 @@ class ChatBox extends Component {
                 <div className={classes.messageArea}>
                     {this.state.messageList.map((message, index) => this.renderMessage(message._id, message.message, index, classes))}
                 </div>
+
                 <div>
 
                     <TextField
@@ -148,11 +185,24 @@ class ChatBox extends Component {
                         onChange={event => this.handleChange(event)}
                         fullWidth
                     />
-                    <Button disabled={this.state.newMessage.length == 0} variant="raised" color="primary" size="large" fullWidth>
+                    <Button
+                        disabled={this.state.newMessage.length == 0}
+                        variant="raised"
+                        color="primary"
+                        size="large"
+                        onClick={() => this.sendMessage()}
+                        fullWidth>
                         Send
                         </Button>
 
                 </div>
+                <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    open={this.state.showNotification}
+                    onClose={this.handleClose}
+                    autoHideDuration={3000}
+                    message={this.state.notificationMessage}
+                />
             </div>);
     }
 }

@@ -83,7 +83,6 @@ class ChatApp extends Component {
     }
 
     selectUser = (user) => {
-        console.log(user);
         this.setState({ activeUser: user });
     }
 
