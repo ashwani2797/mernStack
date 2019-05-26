@@ -1,22 +1,16 @@
 const assert = require('assert');
 const { Given, When, Then } = require('cucumber');
+const service = require('./../../server/helpers/codeForTest');
 
-function isItFriday(today) {
-    if (today === "Friday") {
-      return "TGIF";
-    } else {
-      return "Nope";
-    }
-  }
-  
-  Given('today is {string}', function (givenDay) {
-    this.today = givenDay;
-  });
-  
-  When('I ask whether it\'s Friday yet', function () {
-    this.actualAnswer = isItFriday(this.today);
-  });
-  
-  Then('I should be told {string}', function (expectedAnswer) {
+
+Given('user name is {string}', function (givenName) {
+    this.name = givenName;
+});
+
+When('I ask whether the user is john', function () {
+    this.actualAnswer = service.isUserJohn(this.name);
+});
+
+Then('I should be told {string}', function (expectedAnswer) {
     assert.equal(this.actualAnswer, expectedAnswer);
-  });
+});
