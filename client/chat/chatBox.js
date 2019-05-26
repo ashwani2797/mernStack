@@ -7,6 +7,7 @@ import Avatar from 'material-ui/Avatar';
 import socketIOClient from "socket.io-client";
 import Snackbar from 'material-ui/Snackbar';
 import styles from './style.js';
+import events from './../../server/service/events';
 
 class ChatBox extends Component {
 
@@ -28,11 +29,11 @@ class ChatBox extends Component {
             console.log("Front end connected");
             socket.emit('register', this.props.user);
 
-            socket.on('messageList', function (messageResponse) {
+            socket.on(events.MESSAGE_LIST, function (messageResponse) {
                 this.setState({ messageList: messageResponse.messageList, conversationId: messageResponse.conversationId });
             }.bind(this));
 
-            socket.on("newMessage", function (newMessage) {
+            socket.on(events.NEW_MESSAGE, function (newMessage) {
                 if(newMessage.author !== this.props.activeUser._id){
                     let notification ="New message from " + newMessage.authorName;
                     this.setState({ showNotification: true,notificationMessage: notification});
@@ -52,7 +53,7 @@ class ChatBox extends Component {
                 sender: this.props.user._id,
                 reciever: nextProps.activeUser._id
             }
-            socket.emit('fetchMessages', data);
+            socket.emit(events.FETCH_MESSAGES, data);
         }
     }
 
@@ -91,7 +92,7 @@ class ChatBox extends Component {
             reciever: this.props.activeUser._id,
             conversationId: this.state.conversationId
         }
-        socket.emit("sendMessage", data);
+        socket.emit(events.SEND_MESSAGE, data);
         messageList.push(data);
         this.setState({ newMessage: '', messageList: messageList });
     }

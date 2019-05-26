@@ -1,7 +1,7 @@
 import config from './../config/config';
 import app from './express';
 import mongoose from 'mongoose';
-var io = require('./socket').listen(5000);
+var io = require('./service/chatSocket').listen(5000);
 
 // Connection URL
 mongoose.Promise = global.Promise

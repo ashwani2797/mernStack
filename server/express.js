@@ -10,7 +10,7 @@ import Template from './../template'
 import userRoutes from './routes/user.routes'
 import authRoutes from './routes/auth.routes'
 import postRoutes from './routes/post.routes'
-import passportRoutes from './passport';
+import passportRoutes from './service/passport';
 import path from 'path'
 
 // modules for server side rendering

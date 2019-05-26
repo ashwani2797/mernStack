@@ -16,6 +16,7 @@
   "homepage": "https://github.com/shamahoque/mern-skeleton",
   "main": "./dist/server.generated.js",
   "scripts": {
+    "test": "cucumber-js",
     "development": "nodemon",
     "build": "webpack --config webpack.config.client.production.js && webpack --mode=production --config webpack.config.server.js",
     "start": "NODE_ENV=production node ./dist/server.generated.js"
@@ -30,6 +31,7 @@
     "babel-preset-env": "1.6.1",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
+    "cucumber": "^5.1.0",
     "file-loader": "1.1.11",
     "nodemon": "1.17.3",
     "webpack": "4.6.0",

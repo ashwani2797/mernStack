@@ -1,25 +1,24 @@
 const socketio = require('socket.io');
-import Conversation from './models/conversation.model.js';
-import Message from './models/message.model.js';
-
-
-
+import Conversation from '../models/conversation.model.js';
+import Message from '../models/message.model.js';
+import events from './events';
+import errorHandler from './../helpers/dbErrorHandler';
 
 
 module.exports.listen = function (port) {
     var onlineUsers = new Map();
     const client = socketio.listen(port).sockets;
-    client.on('connection', function (socket) {
+    client.on(events.CONNECTION, function (socket) {
         var id = socket.id;
 
-        socket.on('register', function (data) {
-            onlineUsers.set(data._id, id);
-            console.log("Registration success for id" + data._id);
+        socket.on(events.REGISTER, function (user) {
+            onlineUsers.set(user._id, id);
+            console.log("Registration success for id" + user._id);
         });
 
-        //On selecting user, this method fetches old chat.
-        socket.on('fetchMessages', function (data) {
-            Conversation.find({ users: { $all: [data.sender, data.reciever] } })
+        //On selecting user, this method fetches persisted chat.
+        socket.on(events.FETCH_MESSAGES, function (userDetails) {
+            Conversation.find({ users: { $all: [userDetails.sender, userDetails.reciever] } })
                 .populate('users', '_id name')
                 .exec((err, conversation) => {
                     if (err) {
@@ -27,10 +26,10 @@ module.exports.listen = function (port) {
                     }
                     if (!conversation.length) {
                         console.log("No Conversation found");
-                        let newConversation = new Conversation({ users: [data.sender, data.reciever], lastMessage: '' });
+                        let newConversation = new Conversation({ users: [userDetails.sender, userDetails.reciever], lastMessage: '' });
                         newConversation.save((err, result) => {
                             if (err) {
-                                console.log("Error while storing conversation" + err);
+                                console.log(errorHandler.getErrorMessage(err));
                             }
                             console.log("new conversation saved" + newConversation);
                             fetchMessages(conversation);
@@ -46,7 +45,7 @@ module.exports.listen = function (port) {
             Message.find({ conversationId: conversation._id })
                 .exec((err, messages) => {
                     if (err) {
-                        console.log("Error while quering messages" + err);
+                        console.log(errorHandler.getErrorMessage(err));
                     }
                     if (!messages.length) {
                         console.log("No new message found");
@@ -56,12 +55,12 @@ module.exports.listen = function (port) {
                         users: conversation.users,
                         messageList: messages.length ? messages : []
                     }
-                    client.to(id).emit('messageList', response);
+                    client.to(id).emit(events.MESSAGE_LIST, response);
                 });
         }
 
 
-        socket.on("sendMessage", function (newMessage) {
+        socket.on(events.SEND_MESSAGE, function (newMessage) {
             var messageModel = new Message({
                 message: newMessage.message,
                 author: newMessage.author,
@@ -70,7 +69,7 @@ module.exports.listen = function (port) {
 
             messageModel.save((err, result) => {
                 if (err) {
-                    console.log("Error while storing new message: " + err);
+                    console.log(errorHandler.getErrorMessage(err));
                     return;
                 }
                 console.log("success storing new message :" + result);
@@ -81,7 +80,7 @@ module.exports.listen = function (port) {
                 console.log("User not active");
                 return;
             }
-            client.to(recieverId).emit('newMessage', newMessage);
+            client.to(recieverId).emit(events.NEW_MESSAGE, newMessage);
         });
 
     });
