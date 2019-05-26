@@ -1,5 +1,5 @@
-module.exports.isUserJohn = (name) => {
+module.exports.isUserJohnAuthorized = (name) => {
     if (name === "John")
-        return "Yes name is john";
-    return "Sorry! Another user";
+        return "true";
+    return "false";
 };

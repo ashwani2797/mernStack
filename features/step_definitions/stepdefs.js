@@ -7,10 +7,10 @@ Given('user name is {string}', function (givenName) {
     this.name = givenName;
 });
 
-When('I ask whether the user is john', function () {
-    this.actualAnswer = service.isUserJohn(this.name);
+When('I try to authorize user john', function () {
+    this.actualAnswer = service.isUserJohnAuthorized(this.name);
 });
 
-Then('I should be told {string}', function (expectedAnswer) {
+Then('I should get {string}', function (expectedAnswer) {
     assert.equal(this.actualAnswer, expectedAnswer);
 });
