@@ -1,7 +1,6 @@
-import config from './../config/config'
-import app from './express'
-import mongoose from 'mongoose'
-
+import config from './../config/config';
+import app from './express';
+import mongoose from 'mongoose';
 // Connection URL
 mongoose.Promise = global.Promise
 mongoose.connect(config.mongoUri)
