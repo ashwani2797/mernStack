@@ -3,8 +3,12 @@ import PropTypes from 'prop-types'
 import {withStyles} from 'material-ui/styles'
 import Card, {CardContent, CardMedia} from 'material-ui/Card'
 import Typography from 'material-ui/Typography'
-import kiki from './../assets/images/kiki.jpg'
-
+import dev from './../assets/images/dev.png'
+import {Link} from 'react-router-dom'
+import Grid from 'material-ui/Grid'
+import auth from './../auth/auth-helper'
+import FindPeople from './../user/FindPeople'
+import Newsfeed from './../post/Newsfeed';
 
 const styles = theme => ({
     card: {
@@ -22,26 +26,57 @@ const styles = theme => ({
 })
 
 class Home extends Component {
+    state = {
+        defaultPage: true
+    }
+    init = () => {
+        if(auth.isAuthenticated()){
+            this.setState({defaultPage: false})
+        }else{
+            this.setState({defaultPage: true})
+        }
+    }
+    componentWillReceiveProps = () => {
+        this.init()
+    }
+    componentDidMount = () => {
+        this.init()
+    }
     render() {
         const {classes} = this.props
         return (
-            <div>
-                <Card className={classes.card}>
-                    <Typography type="headline" component="h2" className={classes.title}>
-                        Kiki love!
-                    </Typography>
-                    <CardMedia className={classes.media} image={kiki} title={"Here is the kiki"}/>
-                    <CardContent>
-                        <Typography type="body1" component="p">
-                            Welcome ! Find your kiki here!
-                        </Typography>
-                    </CardContent>
-                </Card>
+            <div className={classes.root}>
+                {this.state.defaultPage &&
+                <Grid container spacing={24}>
+                    <Grid item xs={12}>
+                        <Card className={classes.card}>
+                            <Typography type="headline" component="h2" className={classes.title}>
+                                Home Page
+                            </Typography>
+                            <CardMedia className={classes.media} image={dev} title="Unicorn Shells"/>
+                            <CardContent>
+                                <Typography type="body1" component="p">
+                                    ALONE we can do so little, TOGETHER we can do so much.
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+                }
+                {!this.state.defaultPage &&
+                <Grid container spacing={24}>
+                    <Grid item xs={8} sm={7}>
+                        <Newsfeed/>
+                    </Grid>
+                    <Grid item xs={6} sm={5}>
+                        <FindPeople/>
+                    </Grid>
+                </Grid>
+                }
             </div>
         )
     }
 }
-
 Home.propTypes = {
     classes: PropTypes.object.isRequired
 }

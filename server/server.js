@@ -1,6 +1,7 @@
-import config from './../config/config'
-import app from './express'
-import mongoose from 'mongoose'
+import config from './../config/config';
+import app from './express';
+import mongoose from 'mongoose';
+var io = require('./service/chatSocket').listen(5000);
 
 // Connection URL
 mongoose.Promise = global.Promise
@@ -14,4 +15,4 @@ app.listen(config.port, (err) => {
         console.log(err)
     }
     console.info('Server started on port %s.', config.port)
-})
+});
